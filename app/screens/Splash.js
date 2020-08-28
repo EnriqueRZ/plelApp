@@ -12,6 +12,7 @@ export default class Splash extends Component {
     componentDidMount() {
         this._isMounted = true;
         // You can load api data or any other thing here if you want
+        /*
         axios.get(`https://docs.brigadaparaleerenlibertad.com/books?page=1`)
         .then(res => {
             var book = {};
@@ -22,7 +23,8 @@ export default class Splash extends Component {
                 this.props.navigation.navigate('Home', { books : book });
             }
         })
-        //const data = await this.navigateToHome();
+        */
+        const data = this.navigateToHome();
         //console.log(this.state);
             //if (data !== null) {
                 //console.log('nop');
@@ -37,7 +39,7 @@ export default class Splash extends Component {
     navigateToHome = async () => {
         // Splash screen will remain visible for 2 seconds
         const wait = time => new Promise((resolve) => setTimeout(resolve, time));
-        return wait(2000).then(() => this.props.navigation.navigate('Home', {books: this.state}))
+        return wait(3000).then(() => this.props.navigation.navigate('Home'))
     };
 
     render() {
