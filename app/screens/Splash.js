@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View, StyleSheet, Image} from 'react-native';
-import axios from 'axios';
+import {Text, View, StyleSheet, Image, SafeAreaView} from 'react-native';
 
 export default class Splash extends Component {
     _isMounted = false;
@@ -37,15 +36,14 @@ export default class Splash extends Component {
     }
 
     navigateToHome = async () => {
-        // Splash screen will remain visible for 2 seconds
         const wait = time => new Promise((resolve) => setTimeout(resolve, time));
         return wait(3000).then(() => this.props.navigation.navigate('Home'))
     };
 
     render() {
         return (
-            <View>
-                <View style={styles.container}>
+            <SafeAreaView style={styles.container} style={styles.container}>
+                <View>
                     <Image
                     style={styles.stretch}
                     source={require('../../assets/img/logo.jpg')}
@@ -54,17 +52,21 @@ export default class Splash extends Component {
                 <View>
                     <Text
                     style={styles.text}>
-                    Tarasco Labs
+                        Tarasco Labs
                     </Text>
                 </View> 
-            </View> 
+            </SafeAreaView> 
         );
     }
 };
 
 const styles = StyleSheet.create({
     container: {
-        paddingTop: 150,
+        //paddingTop: 150,
+        flex : 1,
+        justifyContent: 'center',
+        //alignItems: 'center',
+        backgroundColor: 'white'
     },
     stretch: {
         width: 400,

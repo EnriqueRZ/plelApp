@@ -8,132 +8,208 @@ import {
     Platform,
     StatusBar,
     FlatList,
-    TouchableHighlight,
-    Modal,
     ImageBackground,
     TouchableOpacity,
     SafeAreaView,
-    ActivityIndicator
+    ActivityIndicator,
 } from 'react-native';
+
+import { SearchBar, Overlay } from 'react-native-elements';
 
 
 export default class Books extends Component {
-    state = {
-        modalVisible: false,
-        data: {},
-        page: 1,
+  state = {
+      modalVisible: false,
+      data: {},
+      dataMemoria: {},
+      dataM: false,
+      page: 1,
+      loading: true,
+      notFound: false,
+      loadingMore: false,
+      search: '',
+      searchData: false,
+      error: null,
+      onEndReachedCalledDuringMomentum : true,
+  }
+  
+  _isMounted = false;
+
+  async getData() {
+    const {page} = this.state;
+    const response = await axios.get(`https://docs.brigadaparaleerenlibertad.com/books?page=${page}`);
+
+    this.setState({
+      data: this.state.page === 1 
+          ? response.data.data['data']
+          : [...this.state.data, ...response.data.data['data']],
+      loading: false,
+      url: response.data.data['next_page_url'],
+      dataMemoria: this.state.page === 1 
+        ? response.data.data['data']
+        : [...this.state.data, ...response.data.data['data']],
+    });
+  }
+
+  searchFilterFunction = (search) => {
+    this.setState({
+      search: search,
+      searchData: true,
+    });
+    setTimeout(() => {
+      this.setState({
         loading: true,
-        loadingMore: false,
-        error: null
-    }
-    
-    _isMounted = false;
-
-    async getData() {
-        const {page} = this.state;
-        const response = await axios.get(`https://docs.brigadaparaleerenlibertad.com/books?page=${page}`);
-
+      });
+      const newData = this.state.data.filter(function(item) {
+        const itemData = item.title ? item.title.toUpperCase() : ''.toUpperCase();
+        const textData = search.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      });
+      
+      if(newData.length === 0) {
+        this.searchData(search);
+      } else {
         this.setState({
-            data: this.state.page === 1 
-                ? response.data.data['data']
-                : [...this.state.data, ...response.data.data['data']],
-          loading: false,
-          url: response.data.data['next_page_url'],
+          data: newData,
         });
-    }
+      }
+    }, 1500);
+  }
 
-    _getMoreData = () => {
-        this.setState(
-          (prevState, nextProps) => ({
-            page: prevState.page + 1,
-            loadingMore: true
-          }),
-          () => {
-            this.getData();
-          }
-        );
-    };
-
-    _renderFooter = () => {
-        if (!this.state.loadingMore) return null;
-
-        return (
-            <View>
-                <ActivityIndicator animating size="large" color="#0000ff"/>
-            </View>
-        );
-    };
-
-    componentDidMount() {
-        this._isMounted = true;
-        this.getData();
-    }
-
-    componentWillUnmount() {
-        this._isMounted = false;
-    }
-    
-    setModalVisible = (visible) => {
-        this.setState({ modalVisible: visible });
-    }
-
-    render() {
-        var urlImg = 'https://brigadaparaleerenlibertad.com/documents/public/img/img_books/';
-        console.log(this.state.url);
-        return (
-            <SafeAreaView style={styles.container}>
-                <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={this.state.modalVisible}
-                    onRequestClose={() => {
-                        Alert.alert("Modal has been closed.");
-                    }}
-                    >
-                    <View style={styles.centeredView}>
-                        <View style={styles.modalView}>
-                        <Text style={styles.modalText}>Hello World!</Text>
-
-                        <TouchableHighlight
-                            style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
-                            onPress={() => {
-                            this.setModalVisible(!this.state.modalVisible);
-                            }}
-                        >
-                            <Text style={styles.textStyle}>Hide Modal</Text>
-                        </TouchableHighlight>
-                        </View>
-                    </View>
-                </Modal>
-
-                    <FlatList 
-                    columnWrapperStyle={{justifyContent: 'space-between'}}
-                    data={Object.values(this.state.data)}
-                    numColumns={2}
-                    keyExtractor={item => item.id}
-                    onEndReached={this._getMoreData}
-                    onEndReachedThreshold={0.5}
-                    ListFooterComponent={this._renderFooter}
-                    renderItem={({item}) =>
+  searchData = async search => {
+    this.setState({loading: true});
+    const response = await axios.post(`https://docs.brigadaparaleerenlibertad.com/books/search`, 
+                    {title: search});
                     
-                        <View style={{flex: 1, backgroundColor:'white', width: '49%', height:205, margin: 2}}>
-                            <TouchableOpacity
-                            onPress={() => {
-                            this.setModalVisible(true);
-                            }}
-                            >
-                                <ImageBackground
-                                style={{width: '100%', height: 200, }}
-                                source={{uri: (urlImg + item.img) }} 
-                                >
-                                </ImageBackground>
-                            </TouchableOpacity>
-                        </View>
-                        
-                    }/>
-            </SafeAreaView>
-        );
+    this.setState({ 
+      data: response.data['data'],
+      loading: false,
+    });
+    console.log(response.data['data']);
+    
+  }
+
+  _getMoreData = () => {
+    this.setState(
+      (prevState, nextProps) => ({
+        page: prevState.page + 1,
+        loading: true
+      }),
+      () => {
+        this.getData();
+      }
+    );
+  };
+
+  _renderFooter = () => {
+    if (!this.state.loading) return null;
+    else {
+      return (
+        <View>
+          <ActivityIndicator animating size="large" color="#0000ff"/>
+        </View>
+      );
     }
+  };
+
+  _renderNotFound = () => {
+    if (this.state.notFound) {
+      return(
+        <View>
+          <Text> NOT FOUND </Text>
+        </View>
+      );
+    } else {
+      return null;
+    }
+  };
+
+  cancel = () => {
+    this.setState({
+      loading: false,
+      data: this.state.dataMemoria,
+      notFound: false,
+      searchData: false,
+    });
+  }
+
+  componentDidMount() {
+    this._isMounted = true;
+    this.getData();
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+  
+  setModalVisible = (visible) => {
+    this.setState({ modalVisible: visible });
+  }
+
+  toggleOverlay = () => {
+    this.setState({ modalVisible: false });
+  };
+
+  render() {
+      var urlImg = 'https://brigadaparaleerenlibertad.com/documents/public/img/img_books/';
+      return (
+        <SafeAreaView style={styles.container}>
+          
+          <Overlay 
+            isVisible={this.state.modalVisible}
+            onBackdropPress={() => this.setModalVisible(false)}
+            fullScreen={false}
+            >
+            
+            <ImageBackground
+                style={{width: 100, height: 200, }}
+                source={{uri: (urlImg + '230') }} 
+                >
+            </ImageBackground>
+          </Overlay>
+          
+          <SearchBar
+          platform="android"
+          round
+          lightTheme
+          searchIcon={{ size: 24 }}
+          onChangeText={this.searchFilterFunction}
+          onClear={this.cancel}
+          placeholder="Buscar..."
+          value={this.state.search}
+            //showLoading
+          />
+
+          <FlatList 
+          columnWrapperStyle={{justifyContent: 'space-between'}}
+          data={Object.values(this.state.data)}
+          numColumns={2}
+          keyExtractor={item => item.id}
+          onEndReached={this.state.searchData ? () => {} : this._getMoreData}
+          onEndReachedThreshold={0.9}
+          onMomentumScrollBegin={() => { this.onEndReachedCalledDuringMomentum = false; }}
+          ListHeaderComponent={this._renderNotFound}
+          ListFooterComponent={this._renderFooter}
+          renderItem={({item}) =>
+          
+            <View style={{flex: 1, backgroundColor:'white', width: '49%', height:205, margin: 2}}>
+              <TouchableOpacity
+              onPress={() => {
+              this.setModalVisible(true);
+              }}
+              >
+                <ImageBackground
+                style={{width: '100%', height: 200, }}
+                source={{uri: (urlImg + item.img) }} 
+                >
+                </ImageBackground>
+              </TouchableOpacity>
+            </View>
+              
+          }/>
+        </SafeAreaView>
+      );
+  }
 };
 
 const styles = StyleSheet.create({
