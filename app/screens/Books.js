@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-
+import { Html5Entities } from 'html-entities'; 
 import {
     View,
     Text,
@@ -10,11 +10,13 @@ import {
     FlatList,
     ImageBackground,
     TouchableOpacity,
+    TouchableHighlight,
     SafeAreaView,
     ActivityIndicator,
+    Modal,
+    ScrollView,
 } from 'react-native';
-
-import { SearchBar, Overlay } from 'react-native-elements';
+import { SearchBar, Overlay, Image } from 'react-native-elements';
 
 
 export default class Books extends Component {
@@ -31,6 +33,7 @@ export default class Books extends Component {
       searchData: false,
       error: null,
       onEndReachedCalledDuringMomentum : true,
+      modalData: {}
   }
   
   _isMounted = false;
@@ -49,6 +52,8 @@ export default class Books extends Component {
         ? response.data.data['data']
         : [...this.state.data, ...response.data.data['data']],
     });
+
+    console.log(response.data.data['data']);
   }
 
   searchFilterFunction = (search) => {
@@ -101,6 +106,34 @@ export default class Books extends Component {
     );
   };
 
+  _Modal = (text) => {
+    return(
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={this.state.modalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>this.state.modalData.title</Text>
+
+            <TouchableHighlight
+              style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
+              onPress={() => {
+                this.setModalVisible(!this.modalVisible);
+              }}
+            >
+              <Text style={styles.textStyle}>Hide Modal</Text>
+            </TouchableHighlight>
+          </View>
+        </View>
+      </Modal>
+    );
+  }
+
   _renderFooter = () => {
     if (!this.state.loading) return null;
     else {
@@ -152,21 +185,40 @@ export default class Books extends Component {
 
   render() {
       var urlImg = 'https://brigadaparaleerenlibertad.com/documents/public/img/img_books/';
+      const entities = new Html5Entities();
       return (
         <SafeAreaView style={styles.container}>
-          
-          <Overlay 
-            isVisible={this.state.modalVisible}
-            onBackdropPress={() => this.setModalVisible(false)}
-            fullScreen={false}
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={this.state.modalVisible}
             >
-            
-            <ImageBackground
-                style={{width: 100, height: 200, }}
-                source={{uri: (urlImg + '230') }} 
-                >
-            </ImageBackground>
-          </Overlay>
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+              <Text style={styles.modalText}>{this.state.modalData.title}</Text>
+              <ScrollView>
+                <Text>{entities.decode(this.state.modalData.description)}</Text>
+              </ScrollView>
+              <TouchableHighlight
+                style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
+                onPress={() => {
+                  this.setModalVisible(!this.state.modalVisible);
+                }}
+              >
+                <Text style={styles.textStyle}>Cerrar</Text>
+              </TouchableHighlight>
+
+              <TouchableHighlight
+                style={{ backgroundColor: "#2196F3" }}
+                onPress={() => {
+                  this.setModalVisible(!this.state.modalVisible);
+                }}
+              >
+                <Text style={styles.textStyle}>Descargar</Text>
+              </TouchableHighlight>
+              </View>
+            </View>
+          </Modal>
           
           <SearchBar
           platform="android"
@@ -194,9 +246,16 @@ export default class Books extends Component {
           
             <View style={{flex: 1, backgroundColor:'white', width: '49%', height:205, margin: 2}}>
               <TouchableOpacity
-              onPress={() => {
-              this.setModalVisible(true);
-              }}
+                onPress={() => {
+                  this.setModalVisible(true);
+                  //console.log(typeof(item.description));
+                  item.description = item.description.replace(/<(?:.|\n)*?>/gm, '');
+                  //item.description = item.description.replace(/&amp;/g, '&');
+                  console.log(item.img);
+                  this.setState({
+                    modalData: item,
+                  });
+                }}
               >
                 <ImageBackground
                 style={{width: '100%', height: 200, }}
@@ -251,6 +310,7 @@ const styles = StyleSheet.create({
       },
       modalText: {
         marginBottom: 15,
-        textAlign: "center"
+        textAlign: "center",
+        textTransform: 'uppercase',
       }
 });
