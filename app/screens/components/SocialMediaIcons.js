@@ -13,8 +13,8 @@ export default class SocialMediaIcons extends Component {
   render() {
     var urlTwitter = 'https://twitter.com/BRIGADACULTURAL';
     var urlFacebook = 'https://facebook.com/BrigadaParaLeerEnLibertad';
-		var urlYoutube = 'https://www.youtube.com/channel/UCeU3saK2bIbuxYEfyQIK5iQ'; 
-		var urlGmail = 'mailto:paraleerenlibertad@gmail.com';
+	  var urlYoutube = 'https://www.youtube.com/channel/UCeU3saK2bIbuxYEfyQIK5iQ'; 
+	  var urlGmail = 'mailto:paraleerenlibertad@gmail.com';
     return (
 			<View style={styles.containerMedia}>
 				<SocialIcon
@@ -58,19 +58,16 @@ const styles = StyleSheet.create({
 		marginRight: 20,
 		marginBottom: 20,
 	},
-
 	icon : {
 		marginLeft: 10,
 		marginRight: 10,
 	},
-
   title : {
     color: "black",
     fontSize: 28,
     textAlign: "justify",
     paddingTop: 10,
   },
-  
   aboutText: {
     fontSize: 18,
     textAlign: "justify",

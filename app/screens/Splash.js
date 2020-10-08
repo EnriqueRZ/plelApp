@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View, StyleSheet, Image, SafeAreaView} from 'react-native';
+import {View, StyleSheet, Image, SafeAreaView} from 'react-native';
 
 export default class Splash extends Component {
 	_isMounted = false;
@@ -10,7 +10,7 @@ export default class Splash extends Component {
 	
 	componentDidMount() {
 		this._isMounted = true;
-		//const data = this.navigateToHome();
+		const data = this.navigateToHome();
 	}
 
 	componentWillUnmount() {
