@@ -52,8 +52,6 @@ export default class Books extends Component {
         ? response.data.data['data']
         : [...this.state.data, ...response.data.data['data']],
     });
-
-    console.log(response.data.data['data']);
   }
 
   searchFilterFunction = (search) => {
@@ -90,8 +88,6 @@ export default class Books extends Component {
       data: response.data['data'],
       loading: false,
     });
-    console.log(response.data['data']);
-    
   }
 
   _getMoreData = () => {
@@ -105,34 +101,6 @@ export default class Books extends Component {
       }
     );
   };
-
-  _Modal = (text) => {
-    return(
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={this.state.modalVisible}
-        onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-        }}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalText}>this.state.modalData.title</Text>
-
-            <TouchableHighlight
-              style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
-              onPress={() => {
-                this.setModalVisible(!this.modalVisible);
-              }}
-            >
-              <Text style={styles.textStyle}>Hide Modal</Text>
-            </TouchableHighlight>
-          </View>
-        </View>
-      </Modal>
-    );
-  }
 
   _renderFooter = () => {
     if (!this.state.loading) return null;
@@ -209,7 +177,7 @@ export default class Books extends Component {
               </TouchableHighlight>
 
               <TouchableHighlight
-                style={{ backgroundColor: "#2196F3" }}
+                style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
                 onPress={() => {
                   this.setModalVisible(!this.state.modalVisible);
                 }}
@@ -248,9 +216,7 @@ export default class Books extends Component {
               <TouchableOpacity
                 onPress={() => {
                   this.setModalVisible(true);
-                  //console.log(typeof(item.description));
                   item.description = item.description.replace(/<(?:.|\n)*?>/gm, '');
-                  //item.description = item.description.replace(/&amp;/g, '&');
                   console.log(item.img);
                   this.setState({
                     modalData: item,

@@ -21,7 +21,7 @@ function HomeStack() {
         name="Home"
         component={Home}
         options={{
-          tabBarLabel: 'Home',
+          tabBarLabel: 'Inicio',
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="home" color={color} size={size} />
           ),
@@ -31,7 +31,7 @@ function HomeStack() {
         name="Books"
         component={Books}
         options={{
-          tabBarLabel: 'Books',
+          tabBarLabel: 'Libros',
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="library-books" color={color} size={size} />
           ),
