@@ -1,5 +1,5 @@
 module.exports = {
-  env: {
+	env: {
     browser: true,
     commonjs: true,
     es2020: true,
@@ -19,11 +19,11 @@ module.exports = {
     'react-native'
   ],
   rules: {
-    "react-native/no-unused-styles": 2,
-    "react-native/split-platform-components": 2,
-    "react-native/no-inline-styles": 2,
-    "react-native/no-color-literals": 2,
-    "react-native/no-raw-text": 2,
+    //"indent": [2, "tab", { "SwitchCase": 1, "VariableDeclarator": 1 }],
+    "react/prop-types": 0,
+    "no-use-before-define": ["error", { "variables": false }],
+    //"react/jsx-indent": [2, "tab"],
+    //"react/jsx-indent-props": [2, "tab"],
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "import/no-named-as-default": 0
   },

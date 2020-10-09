@@ -1,18 +1,17 @@
-import React, {Component} from 'react';
+/* eslint-disable arrow-body-style */
+import React from 'react';
 
-import {
-  View,
-} from 'react-native';
+import { View } from 'react-native';
 
-export default class Hr extends Component {
-  render() {
-    return (
-			<View
-				style={{
-					borderBottomColor: 'black',
-					borderBottomWidth: 1,
-				}}
- 			/>
-    );
-  }
+const Hr = () => {
+  return (
+    <View
+      style={{
+        borderBottomColor: 'black',
+        borderBottomWidth: 1,
+      }}
+    />
+  );
 };
+
+export default Hr;

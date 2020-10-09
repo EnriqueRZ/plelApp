@@ -1,11 +1,11 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {View, StyleSheet, Image, SafeAreaView} from 'react-native';
 
 export default class Splash extends Component {
 	_isMounted = false;
 
 	state = {
-			books: {}
+    books: {}
 	};
 	
 	componentDidMount() {
@@ -14,12 +14,12 @@ export default class Splash extends Component {
 	}
 
 	componentWillUnmount() {
-			this._isMounted = false;
+    this._isMounted = false;
 	}
 
 	navigateToHome = async () => {
-			const wait = time => new Promise((resolve) => setTimeout(resolve, time));
-			return wait(3000).then(() => this.props.navigation.navigate('Home'))
+    const wait = time => new Promise((resolve) => setTimeout(resolve, time));
+    return wait(3000).then(() => this.props.navigation.navigate('Home'))
 	};
 
 	render() {

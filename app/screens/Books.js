@@ -1,39 +1,39 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import axios from 'axios';
 import { Html5Entities } from 'html-entities'; 
 import {
-    View,
-    Text,
-    StyleSheet,
-    Platform,
-    StatusBar,
-    FlatList,
-    ImageBackground,
-    TouchableOpacity,
-    TouchableHighlight,
-    SafeAreaView,
-    ActivityIndicator,
-    Modal,
-    ScrollView,
+  View,
+  Text,
+  StyleSheet,
+  Platform,
+  StatusBar,
+  FlatList,
+  ImageBackground,
+  TouchableOpacity,
+  TouchableHighlight,
+  SafeAreaView,
+  ActivityIndicator,
+  Modal,
+  ScrollView,
 } from 'react-native';
-import { SearchBar, Overlay, Image } from 'react-native-elements';
+import { SearchBar } from 'react-native-elements';
 
 
 export default class Books extends Component {
   state = {
-      modalVisible: false,
-      data: {},
-      dataMemoria: {},
-      dataM: false,
-      page: 1,
-      loading: true,
-      notFound: false,
-      loadingMore: false,
-      search: '',
-      searchData: false,
-      error: null,
-      onEndReachedCalledDuringMomentum : true,
-      modalData: {}
+    modalVisible: false,
+    data: {},
+    dataMemoria: {},
+    dataM: false,
+    page: 1,
+    loading: true,
+    notFound: false,
+    loadingMore: false,
+    search: '',
+    searchData: false,
+    error: null,
+    onEndReachedCalledDuringMomentum : true,
+    modalData: {}
   }
   
   _isMounted = false;
@@ -44,8 +44,8 @@ export default class Books extends Component {
 
     this.setState({
       data: this.state.page === 1 
-          ? response.data.data['data']
-          : [...this.state.data, ...response.data.data['data']],
+        ? response.data.data['data']
+        : [...this.state.data, ...response.data.data['data']],
       loading: false,
       url: response.data.data['next_page_url'],
       dataMemoria: this.state.page === 1 
