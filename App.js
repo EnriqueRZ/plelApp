@@ -7,7 +7,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import Home from './app/screens/Home';
-import About from './app/screens/About';
+import About from "./app/screens/About";
 import Splash from './app/screens/Splash';
 import Books from './app/screens/Books';
 
@@ -38,7 +38,7 @@ function HomeStack() {
         }}
       />
       <Tab.Screen
-        name="Acerca"
+        name="About"
         component={About}
         options={{
           tabBarLabel: 'Acerca de',

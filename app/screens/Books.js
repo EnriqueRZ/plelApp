@@ -18,7 +18,6 @@ import {
 } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 
-
 export default class Books extends Component {
   state = {
     modalVisible: false,
@@ -152,7 +151,7 @@ export default class Books extends Component {
   };
 
   render() {
-		var urlImg = 'https://brigadaparaleerenlibertad.com/documents/public/img/img_books/';
+		const urlImg = 'https://brigadaparaleerenlibertad.com/documents/public/img/img_books/';
 		const entities = new Html5Entities();
 		return (
 			<SafeAreaView style={styles.container}>
@@ -219,7 +218,7 @@ export default class Books extends Component {
 							onPress={() => {
 								this.setModalVisible(true);
 								item.description = item.description.replace(/<(?:.|\n)*?>/gm, '');
-								console.log(item.img);
+								//console.log(item.img);
 								this.setState({
 									modalData: item,
 								});
@@ -282,7 +281,6 @@ const styles = StyleSheet.create({
 	},
 	modalButtons: {
 		flex : 2,
-		//justifyContent: 'center',
 		width: '100%',
 		height: 150,
 	}
