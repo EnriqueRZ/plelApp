@@ -18,7 +18,6 @@ import {
 } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 
-
 export default class Books extends Component {
   state = {
     modalVisible: false,
@@ -152,138 +151,141 @@ export default class Books extends Component {
   };
 
   render() {
-		var urlImg = 'https://brigadaparaleerenlibertad.com/documents/public/img/img_books/';
-		const entities = new Html5Entities();
-		return (
-			<SafeAreaView style={styles.container}>
-				<Modal
-					animationType="slide"
-					transparent={true}
-					visible={this.state.modalVisible}
-				>
-					<View style={styles.centeredView}>
-						<View style={styles.modalView}>
-						<Text style={styles.modalText}>{this.state.modalData.title}</Text>
-						<ScrollView>
-							<Text>{entities.decode(this.state.modalData.description)}</Text>
-						</ScrollView>
-						<View style={styles.modalButtons}>
-							<TouchableHighlight
-								style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
-								onPress={() => {
-									this.setModalVisible(!this.state.modalVisible);
-								}}
-							>
-							<Text style={styles.textStyle}>Cerrar</Text>
-							</TouchableHighlight>
+    const urlImg = 'https://brigadaparaleerenlibertad.com/documents/public/img/img_books/';
+    const entities = new Html5Entities();
+    return (
+      <SafeAreaView style={styles.container}>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={this.state.modalVisible}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalText}>{this.state.modalData.title}</Text>
+              <ScrollView>
+                <Text>{entities.decode(this.state.modalData.description)}</Text>
+              </ScrollView>
+              <View style={styles.modalButtons}>
+                <TouchableHighlight
+                  style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
+                  onPress={() => {
+                    this.setModalVisible(!this.state.modalVisible);
+                  }}
+                >
+                  <Text style={styles.textStyle}>Cerrar</Text>
+                </TouchableHighlight>
+                
+                <TouchableHighlight
+                  style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
+                  onPress={() => {
+                    this.setModalVisible(!this.state.modalVisible);
+                  }}
+                >
+                  <Text style={styles.textStyle}>Descargar</Text>
+                </TouchableHighlight>
+              </View>
+            </View>
+          </View>
+        </Modal>
 
-							<TouchableHighlight
-								style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
-								onPress={() => {
-									this.setModalVisible(!this.state.modalVisible);
-								}}
-							>
-							<Text style={styles.textStyle}>Descargar</Text>
-							</TouchableHighlight>
-						</View>
-						</View>
-					</View>
-				</Modal>
-				
-				<SearchBar
-					platform="android"
-					round
-					lightTheme
-					searchIcon={{ size: 24 }}
-					onChangeText={this.searchFilterFunction}
-					onClear={this.cancel}
-					placeholder="Buscar..."
-					value={this.state.search}
-					//showLoading
-				/>
-
-				<FlatList 
-					columnWrapperStyle={{justifyContent: 'space-between'}}
-					data={Object.values(this.state.data)}
-					numColumns={2}
-					keyExtractor={item => item.id}
-					onEndReached={this.state.searchData ? () => {} : this._getMoreData}
-					onEndReachedThreshold={0.9}
-					onMomentumScrollBegin={() => { this.onEndReachedCalledDuringMomentum = false; }}
-					ListHeaderComponent={this._renderNotFound}
-					ListFooterComponent={this._renderFooter}
-					renderItem={({item}) =>
-				
-					<View style={{flex: 1, backgroundColor:'white', width: '49%', height:205, margin: 2}}>
-						<TouchableOpacity
-							onPress={() => {
-								this.setModalVisible(true);
-								item.description = item.description.replace(/<(?:.|\n)*?>/gm, '');
-								console.log(item.img);
-								this.setState({
-									modalData: item,
-								});
-							}}
-						>
-							<ImageBackground
-							style={{width: '100%', height: 200, }}
-							source={{uri: (urlImg + item.img) }} 
-							>
-							</ImageBackground>
-						</TouchableOpacity>
-					</View>
-				}/>
-			</SafeAreaView>
-		);
+        <SearchBar
+          platform="android"
+          round
+          lightTheme
+          searchIcon={{ size: 24 }}
+          onChangeText={this.searchFilterFunction}
+          onClear={this.cancel}
+          placeholder="Buscar..."
+          value={this.state.search}
+        />
+        
+        <FlatList
+          columnWrapperStyle={{justifyContent: 'space-between'}}
+          data={Object.values(this.state.data)}
+          numColumns={2}
+          keyExtractor={item => item.id}
+          onEndReached={this.state.searchData ? () => {} : this._getMoreData}
+          onEndReachedThreshold={0.9}
+          onMomentumScrollBegin={() => { this.onEndReachedCalledDuringMomentum = false; }}
+          ListHeaderComponent={this._renderNotFound}
+          ListFooterComponent={this._renderFooter}
+          renderItem={({item}) =>
+          
+          <View style={{flex: 1, backgroundColor:'white', width: '49%', height:205, margin: 2}}>
+            <TouchableOpacity
+              onPress={() => {
+                this.setModalVisible(true);
+                item.description = item.description.replace(/<(?:.|\n)*?>/gm, '');
+                this.setState({
+                  modalData: item,
+                });
+              }}
+            >
+            <ImageBackground
+              style={{width: '100%', height: 200, }}
+              source={{uri: (urlImg + item.img) }} 
+            > 
+            </ImageBackground>
+            </TouchableOpacity>
+          </View>
+        }/>
+      </SafeAreaView>
+    );
   }
 };
 
 const styles = StyleSheet.create({
-	container: {
-		flex : 1,
-		paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
-	},
-	centeredView: {
-		flex: 1,
-		justifyContent: "center",
-		alignItems: "center",
-		marginTop: 22
-	},
-	modalView: {
-		margin: 20,
-		backgroundColor: "white",
-		borderRadius: 20,
-		padding: 35,
-		alignItems: "center",
-		shadowColor: "#000",
-		shadowOffset: {
-			width: 0,
-			height: 2
-		},
-		shadowOpacity: 0.25,
-		shadowRadius: 3.84,
-		elevation: 5
-	},
-	openButton: {
-		backgroundColor: "#F194FF",
-		borderRadius: 20,
-		padding: 10,
-		elevation: 2,
-	},
-	textStyle: {
-		color: "white",
-		fontWeight: "bold",
-		textAlign: "center"
-	},
-	modalText: {
-		marginBottom: 15,
-		textAlign: "center",
-		textTransform: 'uppercase',
-	},
-	modalButtons: {
-		flex : 2,
-		//justifyContent: 'center',
-		width: '100%',
-		height: 150,
-	}
+  container: {
+    flex : 1,
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
+  },
+  
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+  },
+  
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5
+  },
+  
+  openButton: {
+    backgroundColor: "#F194FF",
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center"
+  },
+  
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center",
+    textTransform: 'uppercase',
+  },
+  
+  modalButtons: {
+    flex : 2,
+    width: '100%',
+    height: 150,
+  }
 });

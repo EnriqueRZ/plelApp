@@ -9,6 +9,7 @@ import {
   StatusBar,
 } from 'react-native';
 
+import { Button } from 'react-native-elements';
 import Hr from './components/Hr';
 import SocialMediaIcons from './components/SocialMediaIcons';
 
@@ -31,9 +32,17 @@ export default class Home extends Component {
           <Text style={styles.aboutText}>{this.state.about}</Text> 
           <SocialMediaIcons />
           <Image
-            style={styles.stretch}
+            style={styles.image}
             source={require('../../assets/img/picture.jpg')}
           />
+          <Button
+            style={styles.buttonDetails}
+            title="MÁS DETALLES"
+            type="solid"
+            onPress={() => {
+              this.props.navigation.navigate('About');
+            }}
+          ></Button>
         </ScrollView>
       </SafeAreaView>
     );
@@ -46,12 +55,14 @@ const styles = StyleSheet.create({
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight + 10 : 0,
     paddingLeft: 15,
     paddingRight: 15,
+    marginBottom: 20,
   },
 
-  stretch: {
+  image: {
 		width: 400,
 		height: 400,
-		resizeMode: 'stretch',
+    resizeMode: 'stretch',
+    marginBottom: 20,
 	},
 
   title : {
@@ -65,5 +76,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: "justify",
     paddingTop: 5,
+  },
+
+  buttonDetails: {
+    paddingTop: 20,
+    marginBottom: 20,
   }
 });
