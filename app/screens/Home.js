@@ -59,8 +59,8 @@ const styles = StyleSheet.create({
   },
 
   image: {
-		width: 400,
-		height: 400,
+		width: 410,
+		height: 410,
     resizeMode: 'stretch',
     marginBottom: 20,
 	},

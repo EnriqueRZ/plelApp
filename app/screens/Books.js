@@ -196,7 +196,7 @@ export default class Books extends Component {
           searchIcon={{ size: 24 }}
           onChangeText={this.searchFilterFunction}
           onClear={this.cancel}
-          placeholder="Buscar..."
+          placeholder="Buscar"
           value={this.state.search}
         />
         
@@ -212,7 +212,7 @@ export default class Books extends Component {
           ListFooterComponent={this._renderFooter}
           renderItem={({item}) =>
           
-          <View style={{flex: 1, backgroundColor:'white', width: '49%', height:205, margin: 2}}>
+          <View style={{flex: 1, backgroundColor:'white', width: '55%', height:205, margin: 2}}>
             <TouchableOpacity
               onPress={() => {
                 this.setModalVisible(true);
@@ -265,7 +265,7 @@ const styles = StyleSheet.create({
   },
   
   openButton: {
-    backgroundColor: "#F194FF",
+    backgroundColor: "#F194F1",
     borderRadius: 20,
     padding: 10,
     elevation: 2,
